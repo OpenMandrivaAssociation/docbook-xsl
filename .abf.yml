@@ -1,2 +1,4 @@
 sources:
+  docbook-xsl-1.79.2.tar.gz: 0e320b963b0dbef795361634282e38431ea9ab68
+removed_sources:
   docbook-xsl-1.75.2.tar.gz: 3f4e2ec9875dd9cd8ed4132626501e24cf5ec389

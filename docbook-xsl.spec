@@ -1,12 +1,12 @@
 Name:		docbook-xsl
-Version:	1.75.2
+Version:	1.79.2
 Release:	1
 Summary:	DocBook XSL stylesheets used by Gradle's documentation build
 Group:		Development/Java
 License:	MIT
-URL:		https://docbook.sourceforge.net/projects/xsl/
-# SourceForge docbook-xsl 1.75.2. The extension jars saxon65.jar and
-# xalan27.jar are removed from this archive; they are prebuilt binaries.
+URL:		https://github.com/docbook/xslt10-stylesheets
+# Upstream docbook-xsl 1.79.2. Prebuilt jars under tools/lib and
+# extensions/ are removed from this archive.
 Source0:	docbook-xsl-%{version}.tar.gz
 
 BuildArch:	noarch
@@ -16,12 +16,12 @@ BuildRequires:	javapackages-filesystem
 BuildRequires:	xalan-j2
 
 %description
-DocBook XSL 1.75.2 stylesheets. Gradle 9.9.1's build catalog names
-net.sf.docbook:docbook-xsl at this version. The documentation task
-unpacks that artifact and expects entries whose paths start with
-docbook/. This package builds that layout into a jar from the
-stylesheet sources. The two extension jars that came in the upstream
-tarball are not included.
+DocBook XSL %{version} stylesheets. The Gradle 9.9.1 catalog requests
+net.sf.docbook:docbook-xsl 1.75.2. That request is not strict. The
+documentation task unpacks the artifact and expects entries whose
+paths start with docbook/. This package builds that layout into a jar
+from the stylesheet sources. Prebuilt extension jars from the upstream
+archive are left out.
 
 %prep
 %autosetup -n docbook-xsl-%{version}
@@ -119,11 +119,11 @@ public class Smoke {
 		StringWriter out = new StringWriter();
 		t.transform(new StreamSource(new StringReader(xml)), new StreamResult(out));
 		String html = out.toString();
-		if (!html.contains("gradle") || !html.contains("docbook_ok") || !html.contains("DocBook XSL Stylesheets V1.75.2")) {
+		if (!html.contains("gradle") || !html.contains("docbook_ok") || !html.contains("DocBook XSL Stylesheets V%{version}")) {
 			System.err.println(html.substring(0, Math.min(html.length(), 1500)));
 			throw new RuntimeException("bad html");
 		}
-		System.out.println("docbook_ok gradle 1.75.2");
+		System.out.println("docbook_ok gradle %{version}");
 	}
 }
 EOF
@@ -139,7 +139,7 @@ java \
 	"$WORKDIR/xsl/docbook/xhtml/docbook.xsl" \
 	"$WORKDIR/article.xml" > "$WORKDIR/out.txt"
 cat "$WORKDIR/out.txt"
-grep -F -q 'docbook_ok gradle 1.75.2' "$WORKDIR/out.txt"
+grep -F -q 'docbook_ok gradle %{version}' "$WORKDIR/out.txt"
 
 %files -f .mfiles
 %license COPYING
